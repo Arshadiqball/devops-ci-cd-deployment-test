@@ -4,5 +4,8 @@
     "description": "A basic PHP application for CI/CD demo",
     "require": {
         "php": ">=7.4"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.6"
     }
 }
