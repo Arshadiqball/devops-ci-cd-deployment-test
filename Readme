@@ -32,9 +32,3 @@ Create Dockerfles or the PHP applicaton and MySQL database:
             I am using the ansible
 
 
-    export GHCR_PAT=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
-    export GITHUB_ACTOR=Arshadiqball
-
-    ghcr_pat: "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"
-github_actor: "Arshadiqball"
-
