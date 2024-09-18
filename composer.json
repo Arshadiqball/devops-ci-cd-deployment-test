@@ -1,0 +1,8 @@
+
+{
+    "name": "basic/php-app",
+    "description": "A basic PHP application for CI/CD demo",
+    "require": {
+        "php": ">=7.4"
+    }
+}
