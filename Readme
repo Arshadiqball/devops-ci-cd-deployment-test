@@ -1,62 +1,145 @@
-arshadiqbal.d@gmail.com
-Arshad888###
+# **PHP Dockerized Application with CI/CD and Monitoring**
 
-docker login -u arshadiqbal
-dckr_pat_C8TvnOGJLwfA2nWLADTIaGEvrr4
+This project contains a PHP application with MySQL that is containerized using Docker and Docker Compose. The repository includes a **CI/CD pipeline** configured using GitHub Actions, **infrastructure provisioning** using Ansible, and **monitoring** using Prometheus and Grafana.
 
-docker-compose up --build
+## **Table of Contents**
 
-docker tag deployment-test-php:latest ghcr.io/arshadiqbal/deployment-test:latest
-docker push ghcr.io/arshadiqbal/deployment-test:latest
+- [Requirements](#requirements)
+- [Project Structure](#project-structure)
+- [Setup and Run Locally](#setup-and-run-locally)
+- [CI/CD Pipeline](#ci-cd-pipeline)
+- [Provisioning Staging Environment](#provisioning-staging-environment)
+- [Monitoring](#monitoring)
+- [Design Choices and Challenges](#design-choices-and-challenges)
 
+---
 
-docker pull ghcr.io/arshadiqball/deployment-test:latest
-docker run -d -p 8080:80 ghcr.io/arshadiqball/deployment-test:latest
+## **Requirements**
 
+- **Docker Desktop** (for Windows or macOS)
+- **Docker Compose**
+- **Ansible** (installed in WSL 2 for Windows users)
+- **GitHub Account** (with GHCR access)
+- **Prometheus** and **Grafana** (for monitoring)
 
+---
 
-Create Dockerfles or the PHP applicaton and MySQL database:
-    • Use Docker Compose to defne a development environment with both services.
-    • Set up a CI/CD pipeline using a CI/CD tool o your choice (e.g., Jenkins, GitLab CI,
-    GitHub Acons).
-    • The pipeline should trigger on each push to the main branch and include the
-    following stages:
-    • Linng and testing of PHP code.
-    • Building Docker images for the PHP applicaton and MySQL.
-    • Pushing Docker images to a container registry.
-    • Deploying the applicaton to a staging environment.
-        Answer: I dont have any ssh live environment... so i cant push there via github action.
-        For that purpose, i just pushed the stuff locally at staging environment via getting from docker pull command.
-    • Infrastructure as Code (IaC):
-        Answer:
-            I am using the ansible
+## **Setup and Run Locally**
 
+Follow these steps to set up and run the project locally using **Docker Compose**:
 
-    export GHCR_PAT=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
-  
+1. **Install Docker Desktop**:
+    - Download and install **Docker Desktop** for your OS from [here](https://www.docker.com/products/docker-desktop).
+    - Enable **WSL 2** if you are on Windows.
+
+2. **Run the Application Locally**:
+    - In your terminal (or WSL if on Windows), navigate to the project directory.
+    - Run the following command to start the PHP and MySQL containers:
     
-    export GHCR_PAT=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
-    export GITHUB_ACTOR=Arshadiqball
+        ```bash
+        docker-compose up -d
+        ```
 
-    ghcr_pat: "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"
-github_actor: "arshadiqball"
+3. **Access the Application**:
+    - Once the containers are up, the PHP application will be available at `http://localhost:8080`.
+    - The MySQL database is accessible at `localhost:3306`.
 
+---
 
-Stop ansible and rerun:
-    docker stop $(docker ps -a -q)  # Stops all running containers
-docker rm $(docker ps -a -q)    # Removes all stopped containers
+## **CI/CD Pipeline**
 
+The **CI/CD pipeline** is configured using **GitHub Actions**. It automates the linting, testing, building, and deployment of the Docker images.
 
-docker rmi $(docker images -q)
+### **CI/CD Pipeline Configuration**:
 
-ansible-playbook deploy-docker.yml --ask-become-pass
+The pipeline runs on pushes to the `main` branch and consists of the following stages:
 
+1. **Lint and Test**: Lints the PHP code using **PHP CodeSniffer** and runs **PHPUnit** tests.
+2. **Build Docker Image**: Builds the Docker image for the PHP application.
+3. **Push Docker Image**: Pushes the Docker image to **GitHub Container Registry (GHCR)**.
 
-echo "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" | docker login ghcr.io -u "Arshadiqball" --password-stdin
+### **How to Use the CI/CD Pipeline**:
 
-export ghcr_pat="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"
-export github_actor="Arshadiqball"
+1. **GitHub Actions**:
+    - The pipeline will automatically run when you push code to the `main` branch.
+    - Make sure you have the correct secrets (`GHCR_PAT` and `GITHUB_ACTOR`) added to **GitHub Secrets**.
 
+2. **Secrets Setup**:
+    - In your GitHub repository, navigate to **Settings > Secrets**.
+    - Add the following secrets:
+        - `GHCR_PAT`: Your GitHub Personal Access Token with `read:packages`, `write:packages`, and `repo` scopes.
+        - `GITHUB_ACTOR`: Your GitHub username.
 
-New Relic Key: NRAK-CI27359MC726BTQ8HHBQGIOPFGZ
+---
 
+## **Provisioning Staging Environment**
+
+The staging environment is provisioned using **Ansible**. The Ansible playbook automates the setup of Docker, pulls the Docker images from **GHCR**, and runs the containers.
+
+### **Steps to Provision Staging Environment**:
+
+1. **Install Ansible**:
+    - Open WSL and run the following commands:
+    
+        ```bash
+        sudo apt update
+        sudo apt install ansible
+        ```
+
+2. **Run the Playbook**:
+    - Navigate to the `ansible/` directory in your terminal and run the playbook:
+
+        ```bash
+        ansible-playbook playbook.yml --ask-become-pass
+        ```
+
+3. **Playbook Tasks**:
+    - Installs Docker.
+    - Logs in to **GHCR**.
+    - Pulls the latest Docker image.
+    - Deploys the PHP application.
+
+---
+
+## **Monitoring**
+
+Monitoring is set up using **Prometheus** and **Grafana**. These tools track and display metrics such as CPU usage, memory usage, and network traffic for your containers.
+
+### **Steps to Set Up Monitoring**:
+
+1. **Navigate to Monitoring Directory**:
+    - Go to the `monitoring/` directory.
+
+2. **Run Docker Compose for Monitoring**:
+    - Use Docker Compose to start **Prometheus** and **Grafana**:
+
+        ```bash
+        docker-compose up -d
+        ```
+
+3. **Access Grafana**:
+    - Grafana will be accessible at `http://localhost:3000` (username: `admin`, password: `admin`).
+    - Add Prometheus as a data source and set up dashboards for monitoring metrics.
+
+---
+
+## **Design Choices and Challenges**
+
+### **Design Choices**:
+- **Containerization**: Using Docker ensures that the environment is consistent across development, testing, and production.
+- **CI/CD with GitHub Actions**: Automates testing, building, and deployment, ensuring that changes are deployed quickly and reliably.
+- **Ansible for Provisioning**: Provides an automated way to set up the infrastructure in a staging environment.
+- **Monitoring**: Real-time monitoring via **Prometheus** and **Grafana** helps track performance and application health.
+
+### **Challenges**:
+- **Docker Authentication Issues**: There were initial challenges in setting up Docker authentication with **GHCR**, but these were resolved using the correct Personal Access Token and `docker_login` Ansible module.
+- **WSL 2 Setup**: Setting up Docker Desktop with **WSL 2** required configuration adjustments to ensure seamless integration between Windows and the Linux environment.
+
+---
+
+## **Contributors**
+
+- **Arshad Iqbal** - Project Lead
+- **[Your Name]** - Contributor
+
+Feel free to open issues or pull requests if you find any bugs or improvements.
