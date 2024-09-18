@@ -33,8 +33,23 @@ Create Dockerfles or the PHP applicaton and MySQL database:
 
 
     export GHCR_PAT=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
+  
+    
+    export GHCR_PAT=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
     export GITHUB_ACTOR=Arshadiqball
 
-    ghcr_pat: "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"
+    ghcr_pat: "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"
 github_actor: "Arshadiqball"
 
+
+Stop ansible and rerun:
+    docker stop $(docker ps -a -q)  # Stops all running containers
+docker rm $(docker ps -a -q)    # Removes all stopped containers
+
+
+docker rmi $(docker images -q)
+
+ansible-playbook deploy-docker.yml --ask-become-pass
+
+export ghcr_pat="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"
+export github_actor="Arshadiqball"
