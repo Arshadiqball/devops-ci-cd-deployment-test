@@ -35,15 +35,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Log in to GitHub Container Registry (GHCR)
+      # Log in to GHCR using Personal Access Token (PAT)
       - name: Log in to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u Arshad --password-stdin
+        run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       # Build the Docker image
       - name: Build Docker image
         run: docker build -t deployment-test-php:latest .
 
-      # Tag the Docker image for GHCR
+      # Tag the Docker image (use lowercase in the repository name)
       - name: Tag Docker image
         run: docker tag deployment-test-php:latest ghcr.io/arshadiqball/deployment-test:latest
 
