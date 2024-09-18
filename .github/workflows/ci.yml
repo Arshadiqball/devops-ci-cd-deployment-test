@@ -21,9 +21,8 @@ jobs:
       - name: Install dependencies
         run: composer install
 
-      # Restrict phpcs to lint only your PHP files in the root directory
       - name: Run lint
         run: ./vendor/bin/phpcs --standard=PSR12 ./*.php
 
       - name: Run tests
-        run: ./vendor/bin/phpunit
+        run: ./vendor/bin/phpunit --configuration phpunit.xml
