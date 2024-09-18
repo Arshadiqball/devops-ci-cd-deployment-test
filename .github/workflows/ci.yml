@@ -41,12 +41,12 @@ jobs:
 
       # Build the Docker image
       - name: Build Docker image
-        run: docker build -t deployment-test-php:latest .
+        run: docker build -t cicd:latest .
 
       # Tag the Docker image (use lowercase in the repository name)
       - name: Tag Docker image
-        run: docker tag deployment-test-php:latest ghcr.io/arshadiqball/deployment-test:latest
+        run: docker tag cicd:latest ghcr.io/arshadiqbal/cicd:latest
 
       # Push the Docker image to GHCR
       - name: Push Docker image to GHCR
-        run: docker push ghcr.io/arshadiqball/deployment-test:latest
+        run: docker push ghcr.io/arshadiqbal/cicd:latest
