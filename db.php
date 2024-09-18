@@ -8,5 +8,3 @@ function get_all_posts()
         ['title' => 'Second Post', 'content' => 'This is the content of the second post.']
     ];
 }
-
-// No closing PHP tag
