@@ -23,7 +23,7 @@ jobs:
 
       # Update the path here to scan your PHP files in the correct directory
       - name: Run lint
-        run: ./vendor/bin/phpcs --standard=PSR12 /
+        run: ./vendor/bin/phpcs --standard=PSR12 /app
 
       - name: Run tests
         run: ./vendor/bin/phpunit
