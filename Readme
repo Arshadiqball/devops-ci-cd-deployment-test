@@ -35,11 +35,11 @@ Create Dockerfles or the PHP applicaton and MySQL database:
     export GHCR_PAT=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
   
     
-    export GHCR_PAT=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
+    export GHCR_PAT=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
     export GITHUB_ACTOR=Arshadiqball
 
-    ghcr_pat: "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"
-github_actor: "Arshadiqball"
+    ghcr_pat: "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"
+github_actor: "arshadiqball"
 
 
 Stop ansible and rerun:
@@ -51,5 +51,12 @@ docker rmi $(docker images -q)
 
 ansible-playbook deploy-docker.yml --ask-become-pass
 
-export ghcr_pat="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"
+
+echo "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" | docker login ghcr.io -u "Arshadiqball" --password-stdin
+
+export ghcr_pat="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"
 export github_actor="Arshadiqball"
+
+
+New Relic Key: NRAK-CI27359MC726BTQ8HHBQGIOPFGZ
+
