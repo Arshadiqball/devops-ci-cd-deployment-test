@@ -26,3 +26,27 @@ jobs:
 
       - name: Run tests
         run: ./vendor/bin/phpunit --configuration phpunit.xml
+
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Log in to GitHub Container Registry (GHCR)
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # Build the Docker image
+      - name: Build Docker image
+        run: docker build -t deployment-test-php:latest .
+
+      # Tag the Docker image for GHCR
+      - name: Tag Docker image
+        run: docker tag deployment-test-php:latest ghcr.io/${{ github.repository_owner }}/deployment-test:latest
+
+      # Push the Docker image to GHCR
+      - name: Push Docker image to GHCR
+        run: docker push ghcr.io/${{ github.repository_owner }}/deployment-test:latest
