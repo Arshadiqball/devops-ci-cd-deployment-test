@@ -13,7 +13,7 @@ $posts = get_all_posts();
 <body>
     <h1>Blog Posts</h1>
     <ul>
-        <?php foreach ($posts as $post): ?>
+        <?php foreach ($posts as $post) : ?>
             <li><strong><?php echo $post['title']; ?></strong>: <?php echo $post['content']; ?></li>
         <?php endforeach; ?>
     </ul>
